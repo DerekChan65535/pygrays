@@ -9,7 +9,11 @@ services:
       - pygrays-network
   
   web:
-    build: ./pygrays-web
+    build:
+      context: ./pygrays-web
+      dockerfile: Dockerfile
+    env_file:
+      - ./pygrays-web/.env.production
     expose:
       - "80"
     restart: on-failure
