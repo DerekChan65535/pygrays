@@ -2,12 +2,34 @@ version: '3'
 services:
   api:
     build: ./pygrays-api
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     restart: on-failure
+    networks:
+      - pygrays-network
+  
   web:
     build: ./pygrays-web
+    expose:
+      - "80"
+    restart: on-failure
+    networks:
+      - pygrays-network
+  
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
     ports:
       - "80:80"
       - "8080:80"
+    depends_on:
+      - api
+      - web
     restart: on-failure
+    networks:
+      - pygrays-network
+
+networks:
+  pygrays-network:
+    driver: bridge
